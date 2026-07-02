@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Make a Prediction</h2>
+
+{% if error %}
+<p class="error">{{ error }}</p>
+{% endif %}
+
+<form id="predict-form">
+    <div class="form-grid">
+        <label>Age
+            <input type="number" step="any" name="age" value="{{ input.age if input else '' }}" required>
+        </label>
+        <label>Weight (lbs)
+            <input type="number" step="any" name="weight" value="{{ input.weight if input else '' }}" required>
+        </label>
+        <label>Official Rating
+            <input type="number" step="any" name="official_rating" value="{{ input.official_rating if input else '' }}" required>
+        </label>
+        <label>Distance (furlongs)
+            <input type="number" step="any" name="distance" value="{{ input.distance if input else '' }}" required>
+        </label>
+        <label>Going
+            <select name="going" required>
+                <option value="">— Select —</option>
+                {% for g in going_values %}
+                <option value="{{ g }}" {{ 'selected' if input and input.going == g else '' }}>{{ g }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Odds
+            <input type="number" step="any" name="odds" value="{{ input.odds if input else '' }}" required>
+        </label>
+    </div>
+    <button type="submit">Predict</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+document.getElementById("predict-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.age = parseFloat(data.age);
+    data.weight = parseFloat(data.weight);
+    data.official_rating = parseFloat(data.official_rating);
+    data.distance = parseFloat(data.distance);
+    data.odds = parseFloat(data.odds);
+
+    const res = await fetch("/predict", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data),
+    });
+    const html = await res.text();
+    document.getElementById("result").innerHTML = html;
+});
+</script>
+
+{% endblock %}

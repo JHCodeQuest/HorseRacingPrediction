@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="stats-row">
+    <div class="stat-card">
+        <span class="stat-label">Rows</span>
+        <span class="stat-value">{{ n_rows }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Columns</span>
+        <span class="stat-value">{{ n_cols }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Accuracy</span>
+        <span class="stat-value">{{ "%.2f"|format(metrics.accuracy) if metrics.accuracy else "—" }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">ROC AUC</span>
+        <span class="stat-value">{{ "%.2f"|format(metrics.roc_auc) if metrics.roc_auc else "—" }}</span>
+    </div>
+</div>
+
+<h2>Sample Data (first 20 rows)</h2>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                {% for col in cols %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in sample %}
+            <tr>
+                {% for col in cols %}
+                <td>{{ row[col] }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

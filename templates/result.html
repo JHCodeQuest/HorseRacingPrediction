@@ -1,0 +1,11 @@
+<div class="result">
+    <h3>Result</h3>
+    <p><strong>Prediction:</strong>
+        {% if prediction == 1 %}
+        <span class="win">Winner &#x1F3C6;</span>
+        {% else %}
+        <span class="lose">Loser</span>
+        {% endif %}
+    </p>
+    <p><strong>Win Probability:</strong> {{ (probability * 100) | round(1) }}%</p>
+</div>
